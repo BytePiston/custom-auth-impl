@@ -6,13 +6,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 
-
 @RestController
 @RequestMapping("api/v1")
 public class HelloController {
 
-    @GetMapping("/hello")
-    public String hello() {
-        return "Hello, Welcome Cactus!!";
-    }
+	@GetMapping("/hello")
+	public String hello() {
+		return "Hello, Welcome Cactus!!";
+	}
+
 }

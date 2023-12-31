@@ -19,25 +19,25 @@ import static com.cactus.springsecurity.client.utils.Constants.HTTP;
 @RequestMapping("api/v1/user")
 public class RegistrationController {
 
-    private final IUserService userService;
+	private final IUserService userService;
 
-    private final ApplicationEventPublisher eventPublisher;
+	private final ApplicationEventPublisher eventPublisher;
 
-    @Autowired
-    public RegistrationController(IUserService userService, ApplicationEventPublisher eventPublisher){
-        this.userService = userService;
-        this.eventPublisher = eventPublisher;
-    }
+	@Autowired
+	public RegistrationController(IUserService userService, ApplicationEventPublisher eventPublisher) {
+		this.userService = userService;
+		this.eventPublisher = eventPublisher;
+	}
 
-    @PostMapping("/register")
-    public HttpStatus registerUser(@RequestBody UserModel userModel, final HttpServletRequest request) {
-        User user = userService.registerUser(userModel);
-        eventPublisher.publishEvent(new RegistrationSuccessEvent(user, getApplicationUrl(request)));
-        return HttpStatus.CREATED;
-    }
+	@PostMapping("/register")
+	public HttpStatus registerUser(@RequestBody UserModel userModel, final HttpServletRequest request) {
+		User user = userService.registerUser(userModel);
+		eventPublisher.publishEvent(new RegistrationSuccessEvent(user, getApplicationUrl(request)));
+		return HttpStatus.CREATED;
+	}
 
-    private String getApplicationUrl(HttpServletRequest request) {
+	private String getApplicationUrl(HttpServletRequest request) {
+		return HTTP + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+	}
 
-        return HTTP + request.getServerName() + ":" + request.getServerPort()+request.getContextPath();
-    }
 }

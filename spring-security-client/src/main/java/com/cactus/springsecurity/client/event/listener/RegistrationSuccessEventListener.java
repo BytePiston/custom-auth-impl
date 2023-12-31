@@ -15,22 +15,23 @@ import java.util.UUID;
 @Slf4j
 public class RegistrationSuccessEventListener implements ApplicationListener<RegistrationSuccessEvent> {
 
-    private final IUserService userService;
+	private final IUserService userService;
 
-    @Autowired
-    public RegistrationSuccessEventListener(IUserService userService){
-        this.userService = userService;
-    }
+	@Autowired
+	public RegistrationSuccessEventListener(IUserService userService) {
+		this.userService = userService;
+	}
 
-    @Override
-    public void onApplicationEvent(RegistrationSuccessEvent event) {
-        //TODO: Generate "Validation Token" for the user with link.
+	@Override
+	public void onApplicationEvent(RegistrationSuccessEvent event) {
+		// TODO: Generate "Validation Token" for the user with link.
 
-        User user = event.getUser();
-        String token = UUID.randomUUID().toString();
-        userService.persistVerificationToken(token, user);
-        //TODO: Send Email with to user "Validation Link".
-        String verificationUrl = event.getApplicationUrl() + Constants.VERIFY_REGISTRATION_ENDPOINT + token;
-        log.info("Follow the link to Verify your Account!! : "+verificationUrl);
-    }
+		User user = event.getUser();
+		String token = UUID.randomUUID().toString();
+		userService.persistVerificationToken(token, user);
+		// TODO: Send Email with to user "Validation Link".
+		String verificationUrl = event.getApplicationUrl() + Constants.VERIFY_REGISTRATION_ENDPOINT + token;
+		log.info("Follow the link to Verify your Account!! : " + verificationUrl);
+	}
+
 }

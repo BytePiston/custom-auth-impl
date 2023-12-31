@@ -5,7 +5,8 @@ import com.cactus.springsecurity.client.model.UserModel;
 
 public interface IUserService {
 
-    User registerUser(UserModel userModel);
+	User registerUser(UserModel userModel);
 
-    void persistVerificationToken(String token, User user);
+	void persistVerificationToken(String token, User user);
+
 }

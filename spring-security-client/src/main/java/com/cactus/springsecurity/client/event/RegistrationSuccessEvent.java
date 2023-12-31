@@ -9,12 +9,14 @@ import org.springframework.context.ApplicationEvent;
 @Setter
 public class RegistrationSuccessEvent extends ApplicationEvent {
 
-    private User user;
-    private String applicationUrl;
+	private User user;
 
-    public RegistrationSuccessEvent(User user, String applicationUrl) {
-        super(user);
-        this.user = user;
-        this.applicationUrl = applicationUrl;
-    }
+	private String applicationUrl;
+
+	public RegistrationSuccessEvent(User user, String applicationUrl) {
+		super(user);
+		this.user = user;
+		this.applicationUrl = applicationUrl;
+	}
+
 }
