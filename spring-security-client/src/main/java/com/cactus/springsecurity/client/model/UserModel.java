@@ -8,10 +8,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserModel {
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String password;
-    private String matchingPassword;
-    private String role;
+
+	private String firstName;
+
+	private String lastName;
+
+	private String email;
+
+	private String password;
+
+	private String matchingPassword;
+
+	private String role;
+
 }

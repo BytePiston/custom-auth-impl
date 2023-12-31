@@ -15,34 +15,36 @@ import java.util.Date;
 @NoArgsConstructor
 public class VerificationToken {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private String id;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
-    private String token;
-    private Date expirationTime;
+	private String token;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    private User user;
+	private Date expirationTime;
 
-    public VerificationToken(String token){
-        super();
-        this.token = token;
-        this.expirationTime = calculateExpirationTime();
-    }
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+	private User user;
 
-    public VerificationToken(String token, User user) {
-        super();
-        this.token = token;
-        this.user = user;
-        this.expirationTime = calculateExpirationTime();
-    }
+	public VerificationToken(String token) {
+		super();
+		this.token = token;
+		this.expirationTime = calculateExpirationTime();
+	}
 
-    private Date calculateExpirationTime() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(new Date().getTime());
-        calendar.add(Calendar.MINUTE, Constants.EXPIRATION_TIME_IN_MINUTES);
-        return calendar.getTime();
-    }
+	public VerificationToken(String token, User user) {
+		super();
+		this.token = token;
+		this.user = user;
+		this.expirationTime = calculateExpirationTime();
+	}
+
+	private Date calculateExpirationTime() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(new Date().getTime());
+		calendar.add(Calendar.MINUTE, Constants.EXPIRATION_TIME_IN_MINUTES);
+		return calendar.getTime();
+	}
+
 }
