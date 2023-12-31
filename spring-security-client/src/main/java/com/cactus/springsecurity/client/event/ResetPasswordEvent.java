@@ -9,19 +9,19 @@ import java.util.concurrent.CompletableFuture;
 
 @Getter
 @Setter
-public class RegistrationSuccessEvent extends ApplicationEvent {
+public class ResetPasswordEvent extends ApplicationEvent {
 
 	private User user;
 
 	private String applicationUrl;
 
-	private final CompletableFuture<String> verificationUrlFuture;
+	private final CompletableFuture<String> resetPasswordUrlFuture;
 
-	public RegistrationSuccessEvent(User user, String applicationUrl) {
+	public ResetPasswordEvent(User user, String applicationUrl) {
 		super(user);
 		this.user = user;
 		this.applicationUrl = applicationUrl;
-		this.verificationUrlFuture = new CompletableFuture<>();
+		this.resetPasswordUrlFuture = new CompletableFuture<>();
 	}
 
 }

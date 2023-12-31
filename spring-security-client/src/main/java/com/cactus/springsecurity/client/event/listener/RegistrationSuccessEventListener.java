@@ -11,6 +11,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
+import static com.cactus.springsecurity.client.utils.Constants.FORWARD_SLASH;
+import static com.cactus.springsecurity.client.utils.Constants.USER;
+
 @Component
 @Slf4j
 public class RegistrationSuccessEventListener implements ApplicationListener<RegistrationSuccessEvent> {
@@ -24,14 +27,13 @@ public class RegistrationSuccessEventListener implements ApplicationListener<Reg
 
 	@Override
 	public void onApplicationEvent(RegistrationSuccessEvent event) {
-		// TODO: Generate "Validation Token" for the user with link.
-
 		User user = event.getUser();
 		String token = UUID.randomUUID().toString();
 		userService.persistVerificationToken(token, user);
-		// TODO: Send Email with to user "Validation Link".
-		String verificationUrl = event.getApplicationUrl() + Constants.VERIFY_REGISTRATION_ENDPOINT + token;
-		log.info("Follow the link to Verify your Account!! : " + verificationUrl);
+		String verificationUrl = event.getApplicationUrl() + FORWARD_SLASH + USER + FORWARD_SLASH
+				+ Constants.VERIFY_REGISTRATION_ENDPOINT + token;
+		log.info("Follow the link to verify your account!! : " + verificationUrl);
+		event.getVerificationUrlFuture().complete(verificationUrl);
 	}
 
 }

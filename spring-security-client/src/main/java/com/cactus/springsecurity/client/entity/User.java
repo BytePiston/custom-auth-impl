@@ -1,6 +1,9 @@
 package com.cactus.springsecurity.client.entity;
 
+import com.cactus.springsecurity.client.model.UserRole;
+import com.cactus.springsecurity.client.validator.ValidateEnum;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
