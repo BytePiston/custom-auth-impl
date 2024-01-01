@@ -6,7 +6,7 @@ public abstract class Constants {
 
 	public static final String VERIFY_REGISTRATION_ENDPOINT = "verifyRegistration?token=";
 
-	public static final String SAVE_PASSWORD_ENDPOINT = "savePassword?token=";
+	public static final String UPDATE_PASSWORD_ENDPOINT = "updatePassword?token=";
 
 	public static final String RESEND_VERIFY_TOKEN_ENDPOINT = "resendVerificationToken?token=";
 

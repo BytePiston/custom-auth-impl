@@ -1,7 +1,6 @@
 package com.cactus.springsecurity.client.event.listener;
 
 import com.cactus.springsecurity.client.entity.User;
-import com.cactus.springsecurity.client.event.RegistrationSuccessEvent;
 import com.cactus.springsecurity.client.event.ResetPasswordEvent;
 import com.cactus.springsecurity.client.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +29,7 @@ public class ResetPasswordEventListener implements ApplicationListener<ResetPass
 		String token = UUID.randomUUID().toString();
 		userService.persistResetPasswordToken(token, user);
 		String resetPasswordUrl = event.getApplicationUrl() + FORWARD_SLASH + USER + FORWARD_SLASH
-				+ SAVE_PASSWORD_ENDPOINT + token;
+				+ UPDATE_PASSWORD_ENDPOINT + token;
 		log.info("Follow the link to reset your password!! : " + resetPasswordUrl);
 		event.getResetPasswordUrlFuture().complete(resetPasswordUrl);
 	}

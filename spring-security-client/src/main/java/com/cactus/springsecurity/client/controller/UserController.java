@@ -102,30 +102,30 @@ public class UserController {
 			eventPublisher.publishEvent(event);
 			CompletableFuture<String> verificationUrl = event.getVerificationUrlFuture();
 			RegistrationTokenResponse response = RegistrationTokenResponse.builder()
-				.message(SUCCESS)
+				.status(SUCCESS)
 				.message("New Token Successfully Generated!!")
 				.tokenUrl(verificationUrl.join())
 				.build();
 			return ResponseEntity.status(HttpStatus.CREATED).body(response);
 		}
 		RegistrationTokenResponse response = RegistrationTokenResponse.builder()
-			.message(INVALID)
+			.status(INVALID)
 			.message("Invalid Token, please verify URL!!")
 			.build();
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 	}
 
 	@PostMapping("/resetPassword")
-	public ResponseEntity<ResetPasswordResponse> resetPassword(@Valid @RequestBody PasswordModel passwordModel,
+	public ResponseEntity<ResetPasswordResponse> resetPassword(@Valid @RequestParam("email") String email,
 			HttpServletRequest request) {
-		Optional<User> userOptional = userService.fetchUserByEmail(passwordModel.getEmail());
+		Optional<User> userOptional = userService.fetchUserByEmail(email);
 		if (userOptional.isPresent()) {
 			User user = userOptional.get();
 			ResetPasswordEvent event = new ResetPasswordEvent(user, Utils.getApplicationUrl(request));
 			eventPublisher.publishEvent(event);
 			CompletableFuture<String> resetUrlFuture = event.getResetPasswordUrlFuture();
 			ResetPasswordResponse response = ResetPasswordResponse.builder()
-				.message(SUCCESS)
+				.status(SUCCESS)
 				.message("New Url Successfully Generated!!")
 				.tokenUrl(resetUrlFuture.join())
 				.build();
@@ -133,14 +133,14 @@ public class UserController {
 		}
 
 		ResetPasswordResponse response = ResetPasswordResponse.builder()
-			.message(INVALID)
+			.status(INVALID)
 			.message("Invalid Request, please verify Email!!")
 			.build();
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 	}
 
-	@PostMapping("/savePassword")
-	public ResponseEntity<ResetPasswordResponse> savePassword(@Valid @RequestBody PasswordModel passwordModel,
+	@PostMapping("/updatePassword")
+	public ResponseEntity<ResetPasswordResponse> updatePassword(@Valid @RequestBody PasswordModel passwordModel,
 			@RequestParam("token") String token, HttpServletRequest request) throws ResourceNotFoundException {
 		String responseString = userService.validateResetPasswordToken(token);
 		if (responseString.equals(SUCCESS)) {
@@ -182,7 +182,7 @@ public class UserController {
 			eventPublisher.publishEvent(event);
 			CompletableFuture<String> resetPasswordUrl = event.getResetPasswordUrlFuture();
 			ResetPasswordResponse response = ResetPasswordResponse.builder()
-				.message(SUCCESS)
+				.status(SUCCESS)
 				.message("New Token Successfully Generated!!")
 				.tokenUrl(resetPasswordUrl.join())
 				.build();
