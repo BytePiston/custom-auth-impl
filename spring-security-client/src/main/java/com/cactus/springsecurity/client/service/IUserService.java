@@ -34,4 +34,5 @@ public interface IUserService {
 	void deleteResetPasswordToken(ResetPasswordToken passwordToken);
 
 	boolean isValidateUserAndOldPassword(ChangePasswordModel changePasswordModel);
+
 }

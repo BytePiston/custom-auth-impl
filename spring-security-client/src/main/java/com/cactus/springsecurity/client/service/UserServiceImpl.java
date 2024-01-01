@@ -123,7 +123,8 @@ public class UserServiceImpl implements IUserService {
 			User user = userOptional.get();
 			user.setPassword(passwordEncoder.encode(newPassword));
 			userRepository.save(user);
-		}else{
+		}
+		else {
 			log.error("User Not Found With Email: " + email);
 			throw new ResourceNotFoundException("USER NOT_FOUND!!");
 		}
@@ -142,7 +143,8 @@ public class UserServiceImpl implements IUserService {
 	@Override
 	public boolean isValidateUserAndOldPassword(ChangePasswordModel changePasswordModel) {
 		Optional<User> userOptional = fetchUserByEmail(changePasswordModel.getEmail());
-		return userOptional.isPresent() && passwordEncoder.matches(changePasswordModel.getOldPassword(), userOptional.get().getPassword());
+		return userOptional.isPresent()
+				&& passwordEncoder.matches(changePasswordModel.getOldPassword(), userOptional.get().getPassword());
 	}
 
 }
