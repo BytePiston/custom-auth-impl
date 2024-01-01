@@ -6,7 +6,8 @@ import com.cactus.springsecurity.client.entity.User;
 import com.cactus.springsecurity.client.event.RegistrationSuccessEvent;
 import com.cactus.springsecurity.client.event.ResetPasswordEvent;
 import com.cactus.springsecurity.client.exception.ResourceNotFoundException;
-import com.cactus.springsecurity.client.model.PasswordModel;
+import com.cactus.springsecurity.client.model.ChangePasswordModel;
+import com.cactus.springsecurity.client.model.ResetPasswordModel;
 import com.cactus.springsecurity.client.model.UserModel;
 import com.cactus.springsecurity.client.response.RegistrationTokenResponse;
 import com.cactus.springsecurity.client.response.ResetPasswordResponse;
@@ -15,6 +16,7 @@ import com.cactus.springsecurity.client.service.IUserService;
 import com.cactus.springsecurity.client.utils.Utils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
@@ -116,7 +118,7 @@ public class UserController {
 	}
 
 	@PostMapping("/resetPassword")
-	public ResponseEntity<ResetPasswordResponse> resetPassword(@Valid @RequestParam("email") String email,
+	public ResponseEntity<ResetPasswordResponse> resetPassword(@NotNull @RequestParam("email") String email,
 			HttpServletRequest request) {
 		Optional<User> userOptional = userService.fetchUserByEmail(email);
 		if (userOptional.isPresent()) {
@@ -140,11 +142,12 @@ public class UserController {
 	}
 
 	@PostMapping("/updatePassword")
-	public ResponseEntity<ResetPasswordResponse> updatePassword(@Valid @RequestBody PasswordModel passwordModel,
-			@RequestParam("token") String token, HttpServletRequest request) throws ResourceNotFoundException {
+	public ResponseEntity<ResetPasswordResponse> updatePassword(
+			@Valid @RequestBody ResetPasswordModel resetPasswordModel, @RequestParam("token") String token,
+			HttpServletRequest request) throws ResourceNotFoundException {
 		String responseString = userService.validateResetPasswordToken(token);
 		if (responseString.equals(SUCCESS)) {
-			userService.updatePassword(passwordModel);
+			userService.updatePassword(resetPasswordModel.getEmail(), resetPasswordModel.getNewPassword());
 			ResetPasswordResponse response = ResetPasswordResponse.builder()
 				.status(SUCCESS)
 				.message("Successfully Updated Password!!")
@@ -195,6 +198,24 @@ public class UserController {
 				.build();
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 		}
+	}
+
+	@PostMapping("/changePassword")
+	public ResponseEntity<ResetPasswordResponse> changePassword(@Valid @RequestBody ChangePasswordModel changePasswordModel,
+			HttpServletRequest request) throws ResourceNotFoundException {
+		if (userService.isValidateUserAndOldPassword(changePasswordModel)) {
+			userService.updatePassword(changePasswordModel.getEmail(), changePasswordModel.getNewPassword());
+			ResetPasswordResponse response = ResetPasswordResponse.builder()
+				.status(SUCCESS)
+				.message("Password Updated Successfully!!")
+				.build();
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+		}
+		ResetPasswordResponse response = ResetPasswordResponse.builder()
+				.status(INVALID)
+				.message("Invalid Password Update Request, Please Verify!!")
+				.build();
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 	}
 
 }

@@ -4,7 +4,7 @@ import com.cactus.springsecurity.client.entity.RegistrationToken;
 import com.cactus.springsecurity.client.entity.ResetPasswordToken;
 import com.cactus.springsecurity.client.entity.User;
 import com.cactus.springsecurity.client.exception.ResourceNotFoundException;
-import com.cactus.springsecurity.client.model.PasswordModel;
+import com.cactus.springsecurity.client.model.ChangePasswordModel;
 import com.cactus.springsecurity.client.model.UserModel;
 import com.cactus.springsecurity.client.repository.ResetPasswordTokenRepository;
 import com.cactus.springsecurity.client.repository.UserRepository;
@@ -117,18 +117,16 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public void updatePassword(PasswordModel passwordModel) throws ResourceNotFoundException {
-		Optional<User> userOptional = userRepository.findByEmail(passwordModel.getEmail());
+	public void updatePassword(String email, String newPassword) throws ResourceNotFoundException {
+		Optional<User> userOptional = fetchUserByEmail(email);
 		if (userOptional.isPresent()) {
 			User user = userOptional.get();
-			user.setPassword(passwordEncoder.encode(passwordModel.getNewPassword()));
+			user.setPassword(passwordEncoder.encode(newPassword));
 			userRepository.save(user);
-		}
-		else {
-			log.error("User Not Found With Email: " + passwordModel.getEmail());
+		}else{
+			log.error("User Not Found With Email: " + email);
 			throw new ResourceNotFoundException("USER NOT_FOUND!!");
 		}
-
 	}
 
 	@Override
@@ -139,6 +137,12 @@ public class UserServiceImpl implements IUserService {
 	@Override
 	public void deleteResetPasswordToken(ResetPasswordToken passwordToken) {
 		resetPasswordTokenRepository.delete(passwordToken);
+	}
+
+	@Override
+	public boolean isValidateUserAndOldPassword(ChangePasswordModel changePasswordModel) {
+		Optional<User> userOptional = fetchUserByEmail(changePasswordModel.getEmail());
+		return userOptional.isPresent() && passwordEncoder.matches(changePasswordModel.getOldPassword(), userOptional.get().getPassword());
 	}
 
 }

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PasswordModel {
+public class ResetPasswordModel {
 
 	@NotBlank(message = "Email Address Can Not Be Blank!")
 	@NotNull(message = "Email Address Can Not Be Empty!")

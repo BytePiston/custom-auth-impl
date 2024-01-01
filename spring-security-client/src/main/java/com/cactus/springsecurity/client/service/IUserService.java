@@ -4,7 +4,7 @@ import com.cactus.springsecurity.client.entity.RegistrationToken;
 import com.cactus.springsecurity.client.entity.ResetPasswordToken;
 import com.cactus.springsecurity.client.entity.User;
 import com.cactus.springsecurity.client.exception.ResourceNotFoundException;
-import com.cactus.springsecurity.client.model.PasswordModel;
+import com.cactus.springsecurity.client.model.ChangePasswordModel;
 import com.cactus.springsecurity.client.model.UserModel;
 
 import java.util.Optional;
@@ -27,10 +27,11 @@ public interface IUserService {
 
 	String validateResetPasswordToken(String token);
 
-	void updatePassword(PasswordModel passwordModel) throws ResourceNotFoundException;
+	void updatePassword(String email, String newPassword) throws ResourceNotFoundException;
 
 	Optional<ResetPasswordToken> fetchResetPasswordToken(String oldToken);
 
 	void deleteResetPasswordToken(ResetPasswordToken passwordToken);
 
+	boolean isValidateUserAndOldPassword(ChangePasswordModel changePasswordModel);
 }
