@@ -13,17 +13,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ChangePasswordModel {
 
-    @NotBlank(message = "Email Address Can Not Be Blank!")
-    @NotNull(message = "Email Address Can Not Be Empty!")
-    @Email(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}", flags = Pattern.Flag.CASE_INSENSITIVE)
-    private String email;
+	@NotBlank(message = "Email Address Can Not Be Blank!")
+	@NotNull(message = "Email Address Can Not Be Empty!")
+	@Email(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}", flags = Pattern.Flag.CASE_INSENSITIVE)
+	private String email;
 
-    @NotBlank(message = "Old Password Can Not Be Blank!")
-    @NotNull(message = "Old Password Can Not Be Empty!")
-    private String oldPassword;
+	@NotBlank(message = "Old Password Can Not Be Blank!")
+	@NotNull(message = "Old Password Can Not Be Empty!")
+	private String oldPassword;
 
-    @NotBlank(message = "New Password Can Not Be Blank!")
-    @NotNull(message = "New Password Can Not Be Empty!")
-    private String newPassword;
+	@NotBlank(message = "New Password Can Not Be Blank!")
+	@NotNull(message = "New Password Can Not Be Empty!")
+	private String newPassword;
 
 }

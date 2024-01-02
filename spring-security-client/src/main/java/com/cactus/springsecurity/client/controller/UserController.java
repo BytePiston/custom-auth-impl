@@ -201,8 +201,9 @@ public class UserController {
 	}
 
 	@PostMapping("/changePassword")
-	public ResponseEntity<ResetPasswordResponse> changePassword(@Valid @RequestBody ChangePasswordModel changePasswordModel,
-			HttpServletRequest request) throws ResourceNotFoundException {
+	public ResponseEntity<ResetPasswordResponse> changePassword(
+			@Valid @RequestBody ChangePasswordModel changePasswordModel, HttpServletRequest request)
+			throws ResourceNotFoundException {
 		if (userService.isValidateUserAndOldPassword(changePasswordModel)) {
 			userService.updatePassword(changePasswordModel.getEmail(), changePasswordModel.getNewPassword());
 			ResetPasswordResponse response = ResetPasswordResponse.builder()
@@ -212,9 +213,9 @@ public class UserController {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
 		}
 		ResetPasswordResponse response = ResetPasswordResponse.builder()
-				.status(INVALID)
-				.message("Invalid Password Update Request, Please Verify!!")
-				.build();
+			.status(INVALID)
+			.message("Invalid Password Update Request, Please Verify!!")
+			.build();
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 	}
 
