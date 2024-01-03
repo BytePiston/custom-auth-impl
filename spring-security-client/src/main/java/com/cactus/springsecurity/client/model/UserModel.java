@@ -1,8 +1,6 @@
 package com.cactus.springsecurity.client.model;
 
 import com.cactus.springsecurity.client.validator.ValidateEnum;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
