@@ -7,6 +7,7 @@ import com.cactus.springsecurity.client.exception.ResourceNotFoundException;
 import com.cactus.springsecurity.client.model.ChangePasswordModel;
 import com.cactus.springsecurity.client.model.UserModel;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface IUserService {
@@ -34,5 +35,7 @@ public interface IUserService {
 	void deleteResetPasswordToken(ResetPasswordToken passwordToken);
 
 	boolean isValidateUserAndOldPassword(ChangePasswordModel changePasswordModel);
+
+	List<User> fetchAllUsers();
 
 }

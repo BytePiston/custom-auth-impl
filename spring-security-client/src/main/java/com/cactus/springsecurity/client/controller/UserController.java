@@ -12,6 +12,7 @@ import com.cactus.springsecurity.client.model.UserModel;
 import com.cactus.springsecurity.client.response.RegistrationTokenResponse;
 import com.cactus.springsecurity.client.response.ResetPasswordResponse;
 import com.cactus.springsecurity.client.response.UserRegistrationResponse;
+import com.cactus.springsecurity.client.response.UserResponse;
 import com.cactus.springsecurity.client.service.IUserService;
 import com.cactus.springsecurity.client.utils.Utils;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,6 +24,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
@@ -217,6 +221,40 @@ public class UserController {
 			.message("Invalid Password Update Request, Please Verify!!")
 			.build();
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+	}
+
+	@GetMapping("/")
+	public UserResponse fetchLoggedInUser(Principal principal) {
+		Optional<User> userOptional = userService.fetchUserByEmail(principal.getName());
+		if (userOptional.isPresent()) {
+			User user = userOptional.get();
+			return UserResponse.builder()
+				.firstName(user.getFirstName())
+				.lastName(user.getLastName())
+				.email(user.getEmail())
+				.role(user.getRole())
+				.build();
+		}
+		return null;
+	}
+
+	@GetMapping("/users")
+	public List<UserResponse> fetchAllUsers() {
+		List<User> userList = userService.fetchAllUsers();
+		if (userList != null && !userList.isEmpty()) {
+			List<UserResponse> userResponseList = new ArrayList<>();
+			for (User user : userList) {
+				UserResponse userResponse = UserResponse.builder()
+					.firstName(user.getFirstName())
+					.lastName(user.getLastName())
+					.email(user.getEmail())
+					.role(user.getRole())
+					.build();
+				userResponseList.add(userResponse);
+			}
+			return userResponseList;
+		}
+		return new ArrayList<>();
 	}
 
 }

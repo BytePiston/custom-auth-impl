@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Optional;
 
 import static com.cactus.springsecurity.client.utils.Constants.*;
@@ -145,6 +146,11 @@ public class UserServiceImpl implements IUserService {
 		Optional<User> userOptional = fetchUserByEmail(changePasswordModel.getEmail());
 		return userOptional.isPresent()
 				&& passwordEncoder.matches(changePasswordModel.getOldPassword(), userOptional.get().getPassword());
+	}
+
+	@Override
+	public List<User> fetchAllUsers() {
+		return userRepository.findAll();
 	}
 
 }
