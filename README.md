@@ -1,8 +1,11 @@
 # Spring Security Parent Project
 
-#### This repository houses a multi-module Spring Security application comprising three main modules: OAuth-Client, OAuth-Server, and OAuth-Resource-Server. Developed using Java, Spring Boot, and SQL. 
+#### This repository houses a multi-module Spring Security application comprising three main modules: 
+- OAuth-Client
+- OAuth-Auth-Server
+- OAuth-Resource-Server 
 
-#### The project implements Authentication and Authorization servers based on OAuth 2.0 and OpenID Connect standards within a distributed system.
+#### The project is developed using Java, Spring Boot, and SQL and implements Authentication and Authorization servers based on OAuth 2.0 and OpenID Connect standards within a distributed system.
 
 ## Table of Contents
 
@@ -64,6 +67,7 @@ To get started with the project, follow these steps:
 - To facilitate user management, I have provided a Postman collection that includes endpoints for creating users, verifying user token, regenerating user tokens, and managing passwords. Import the Postman Collection into your Postman workspace.
 
 ### Token Verification Expiration Time And Regeneration:
+**_NOTE: Please verify Token using the URL received in the response of `/register`, `/resetPassword`, and `/updatePassword` endpoint; Without Token Verification User will be marked as "Disabled";_** 
 - For "Newly Created Users" and "Password Reset," the token verification expiration time is currently set to 10 minutes. You can customize this by changing the EXPIRATION_TIME_IN_MINUTES variable in the Constants.java file.
 - Ensure that user tokens are validated within the specified expiration time (**Default is 10 minutes**). If the validation time exceeds, regenerate the token using the appropriate endpoint:
 - For "Newly Created Users": Use `/resendVerificationToken` endpoint.
