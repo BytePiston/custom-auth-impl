@@ -19,18 +19,22 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClient;
 
-import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import static com.cactus.springsecurity.client.utils.Constants.*;
+import static org.springframework.security.oauth2.client.web.reactive.function.client.ServletOAuth2AuthorizedClientExchangeFilterFunction.oauth2AuthorizedClient;
 
 @RestController
 @RequestMapping("api/v1/user")
@@ -40,10 +44,17 @@ public class UserController {
 
 	private final ApplicationEventPublisher eventPublisher;
 
+	private final WebClient webClient;
+
+	// Fetching Resource-server URL from application.yml;
+	@Value("${resource-server.api-url-value}")
+	public String RESOURCE_SERVER_API_URL;
+
 	@Autowired
-	public UserController(IUserService userService, ApplicationEventPublisher eventPublisher) {
+	public UserController(IUserService userService, ApplicationEventPublisher eventPublisher, WebClient webClient) {
 		this.userService = userService;
 		this.eventPublisher = eventPublisher;
+		this.webClient = webClient;
 	}
 
 	@PostMapping("/register")
@@ -223,38 +234,28 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 	}
 
+	// Below 2 endpoint are fetched from Resource Server using Webclient
 	@GetMapping("/")
-	public UserResponse fetchLoggedInUser(Principal principal) {
-		Optional<User> userOptional = userService.fetchUserByEmail(principal.getName());
-		if (userOptional.isPresent()) {
-			User user = userOptional.get();
-			return UserResponse.builder()
-				.firstName(user.getFirstName())
-				.lastName(user.getLastName())
-				.email(user.getEmail())
-				.role(user.getRole())
-				.build();
-		}
-		return null;
+	public UserResponse fetchLoggedInUser(
+			@RegisteredOAuth2AuthorizedClient(API_CLIENT_AUTHORIZATION_CODE) OAuth2AuthorizedClient authorizedClient) {
+		return this.webClient.get()
+			.uri(RESOURCE_SERVER_API_URL + "/")
+			.attributes(oauth2AuthorizedClient(authorizedClient))
+			.retrieve()
+			.bodyToMono(UserResponse.class)
+			.block();
 	}
 
-	@GetMapping("/users")
-	public List<UserResponse> fetchAllUsers() {
-		List<User> userList = userService.fetchAllUsers();
-		if (userList != null && !userList.isEmpty()) {
-			List<UserResponse> userResponseList = new ArrayList<>();
-			for (User user : userList) {
-				UserResponse userResponse = UserResponse.builder()
-					.firstName(user.getFirstName())
-					.lastName(user.getLastName())
-					.email(user.getEmail())
-					.role(user.getRole())
-					.build();
-				userResponseList.add(userResponse);
-			}
-			return userResponseList;
-		}
-		return new ArrayList<>();
+	@GetMapping("/viewAllUsers")
+	public List<UserResponse> fetchAllUsers(
+			@RegisteredOAuth2AuthorizedClient(API_CLIENT_AUTHORIZATION_CODE) OAuth2AuthorizedClient authorizedClient) {
+		return this.webClient.get()
+			.uri(RESOURCE_SERVER_API_URL + "/users")
+			.attributes(oauth2AuthorizedClient(authorizedClient))
+			.retrieve()
+			.bodyToMono(new ParameterizedTypeReference<List<UserResponse>>() {
+			})
+			.block();
 	}
 
 }

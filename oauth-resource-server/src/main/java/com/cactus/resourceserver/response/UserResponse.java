@@ -1,21 +1,17 @@
-package com.cactus.springsecurity.client.entity;
+package com.cactus.resourceserver.response;
 
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class User {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.UUID)
-	private String id;
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class UserResponse {
 
 	private String firstName;
 
@@ -23,11 +19,6 @@ public class User {
 
 	private String email;
 
-	@Column(length = 60)
-	private String password;
-
 	private String role;
-
-	private boolean enabled = false;
 
 }
