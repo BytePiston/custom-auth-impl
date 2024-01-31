@@ -26,4 +26,6 @@ public abstract class Constants {
 
 	public static final String INVALID = "INVALID";
 
+	public static final String API_CLIENT_AUTHORIZATION_CODE = "api-client-authorization-code";
+
 }

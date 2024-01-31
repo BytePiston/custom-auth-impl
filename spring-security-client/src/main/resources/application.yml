@@ -38,3 +38,6 @@ spring:
 logging:
   level:
     org.springframework.web.client.RestTemplate: DEBUG
+
+resource-server:
+  api-url-value: http://127.0.0.1:8090/api/v1

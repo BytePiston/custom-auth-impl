@@ -6,6 +6,7 @@
     <modules>
         <module>spring-security-client</module>
         <module>oauth-authorization-server</module>
+        <module>oauth-resource-server</module>
     </modules>
 
     <parent>

@@ -1,4 +1,4 @@
-package com.cactus.springsecurity.client.entity;
+package com.cactus.resourceserver.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
