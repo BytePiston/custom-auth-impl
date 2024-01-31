@@ -75,7 +75,7 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
-	@GetMapping("/verifyRegistration")
+	@GetMapping("/verifyToken")
 	public ResponseEntity<RegistrationTokenResponse> validateTokenUrl(@RequestParam("token") String token,
 			HttpServletRequest request) {
 
