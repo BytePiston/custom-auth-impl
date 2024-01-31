@@ -16,7 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class WebSecurityConfig {
 
-	private static final String[] WHITE_LIST_GET_URLS = { "/api/v1/hello", "/api/v1/user/verifyRegistration*" };
+	private static final String[] WHITE_LIST_GET_URLS = { "/api/v1/hello", "/api/v1/user/verifyToken*" };
 
 	private static final String[] WHITE_LIST_POST_URLS = { "/api/v1/user/register",
 			"/api/v1/user/resendVerificationToken*" };
