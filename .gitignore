@@ -1,4 +1,4 @@
 .idea
 /spring-security-tutorial.iml
-/spring-security-client/target
+/oauth-client/target
 /oauth-authorization-server/target
