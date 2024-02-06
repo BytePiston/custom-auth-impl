@@ -1,0 +1,95 @@
+version: '3.9'
+
+services:
+  #  MySQL DB config
+  spring-security-mysql:
+    image: mysql:latest
+    restart: always
+    container_name: spring-security-mysql
+    environment:
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: test
+      MYSQL_DATABASE: spring-security
+    ports:
+      - "3306:3306"
+    networks:
+      - spring-security-network
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      interval: 1s
+      timeout: 20s
+      retries: 10
+
+  oauth-authorization-server:
+#    image: neel0108p/oauth-authorization-server
+    build: ./oauth-authorization-server
+#    working_dir: /oauth-authorization-server
+    container_name: oauth-authorization-server
+    restart: always
+    depends_on:
+      spring-security-mysql:
+        condition: service_healthy
+    links:
+      - spring-security-mysql
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://spring-security-mysql:3306/spring-security
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=test
+    ports:
+      - "9000:9000"
+    networks:
+      - spring-security-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9000" ]
+      interval: 1s
+      timeout: 20s
+      retries: 10
+
+  oauth-client:
+#    image: neel0108p/oauth-client
+    build: ./oauth-client
+    container_name: oauth-client
+    depends_on:
+      spring-security-mysql:
+        condition: service_healthy
+      oauth-authorization-server:
+        condition: service_healthy
+    links:
+      - spring-security-mysql
+      - oauth-authorization-server
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://spring-security-mysql:3306/spring-security
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=test
+#      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_SPRING_ISSUER-URI=http://oauth-authorization-server:9000
+      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_SPRING_ISSUER-URI=http://localhost:9000
+    ports:
+      - "8080:8080"
+    networks:
+      - spring-security-network
+
+  oauth-resource-server:
+#    image: neel0108p/oauth-resource-server
+    build: ./oauth-resource-server
+    container_name: oauth-resource-server
+    depends_on:
+      spring-security-mysql:
+        condition: service_healthy
+      oauth-authorization-server:
+        condition: service_healthy
+    links:
+      - spring-security-mysql
+      - oauth-authorization-server
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://spring-security-mysql:3306/spring-security
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=test
+    ports:
+      - "8090:8090"
+    networks:
+      - spring-security-network
+
+networks:
+  spring-security-network:
+    driver: bridge
+
