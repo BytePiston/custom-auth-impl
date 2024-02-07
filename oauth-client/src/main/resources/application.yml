@@ -2,6 +2,8 @@ server:
   port: 8080
 
 spring:
+  application:
+    name: oauth-client
   datasource:
     url: jdbc:mysql://localhost:3306/user_registration
     username: root
@@ -40,4 +42,11 @@ logging:
     org.springframework.web.client.RestTemplate: DEBUG
 
 resource-server:
-  api-url-value: http://127.0.0.1:8090/api/v1
+  api-url-value: OAUTH-RESOURCE-SERVER
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}
+    fetch-registry: true
+    register-with-eureka: true

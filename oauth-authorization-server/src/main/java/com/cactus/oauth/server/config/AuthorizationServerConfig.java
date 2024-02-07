@@ -5,10 +5,15 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.data.repository.cdi.Eager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,6 +34,7 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.util.List;
 import java.util.UUID;
 
 @Configuration(proxyBeanMethods = false)
@@ -36,6 +42,13 @@ public class AuthorizationServerConfig {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	@Lazy
+	private DiscoveryClient discoveryClient;
+
+	@Value("${spring.application.name}")
+	public String AUTH_SERVER_APP_NAME;
 
 	@Bean
 	@Order(Ordered.HIGHEST_PRECEDENCE)
@@ -105,7 +118,9 @@ public class AuthorizationServerConfig {
 
 	@Bean
 	public AuthorizationServerSettings providerSettings() {
-		return AuthorizationServerSettings.builder().issuer("http://localhost:9000").build();
+		List<ServiceInstance> serviceInstanceList = discoveryClient.getInstances("AUTH_SERVER_APP_NAME");
+		ServiceInstance serviceInstance = serviceInstanceList.get(0);
+		return AuthorizationServerSettings.builder().issuer(serviceInstance.getUri().toString()).build();
 	}
 
 }

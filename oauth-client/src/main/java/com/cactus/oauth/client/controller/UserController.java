@@ -20,6 +20,8 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
@@ -46,9 +48,12 @@ public class UserController {
 
 	private final WebClient webClient;
 
+	@Autowired
+	private DiscoveryClient discoveryClient;
+
 	// Fetching Resource-server URL from application.yml;
 	@Value("${resource-server.api-url-value}")
-	public String RESOURCE_SERVER_API_URL;
+	public String RESOURCE_SERVER_APP_NAME;
 
 	@Autowired
 	public UserController(IUserService userService, ApplicationEventPublisher eventPublisher, WebClient webClient) {
@@ -238,8 +243,11 @@ public class UserController {
 	@GetMapping("/")
 	public UserResponse fetchLoggedInUser(
 			@RegisteredOAuth2AuthorizedClient(API_CLIENT_AUTHORIZATION_CODE) OAuth2AuthorizedClient authorizedClient) {
+		List<ServiceInstance> serviceInstanceList = discoveryClient.getInstances(RESOURCE_SERVER_APP_NAME);
+		ServiceInstance serviceInstance = serviceInstanceList.get(0);
+
 		return this.webClient.get()
-			.uri(RESOURCE_SERVER_API_URL + "/")
+			.uri(serviceInstance.getUri() + "/api/v1/")
 			.attributes(oauth2AuthorizedClient(authorizedClient))
 			.retrieve()
 			.bodyToMono(UserResponse.class)
@@ -249,8 +257,11 @@ public class UserController {
 	@GetMapping("/viewAllUsers")
 	public List<UserResponse> fetchAllUsers(
 			@RegisteredOAuth2AuthorizedClient(API_CLIENT_AUTHORIZATION_CODE) OAuth2AuthorizedClient authorizedClient) {
+		List<ServiceInstance> serviceInstanceList = discoveryClient.getInstances(RESOURCE_SERVER_APP_NAME);
+		ServiceInstance serviceInstance = serviceInstanceList.get(0);
+
 		return this.webClient.get()
-			.uri(RESOURCE_SERVER_API_URL + "/users")
+			.uri(serviceInstance.getUri() + "/api/v1/users")
 			.attributes(oauth2AuthorizedClient(authorizedClient))
 			.retrieve()
 			.bodyToMono(new ParameterizedTypeReference<List<UserResponse>>() {
