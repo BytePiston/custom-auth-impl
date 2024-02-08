@@ -237,7 +237,7 @@ public class UserController {
 	// Below 2 endpoint are fetched from Resource Server using Webclient
 	@GetMapping("/")
 	public UserResponse fetchLoggedInUser(
-			@RegisteredOAuth2AuthorizedClient(API_CLIENT_AUTHORIZATION_CODE) OAuth2AuthorizedClient authorizedClient) {
+			@RegisteredOAuth2AuthorizedClient("okta") OAuth2AuthorizedClient authorizedClient) {
 		return this.webClient.get()
 			.uri(RESOURCE_SERVER_API_URL + "/")
 			.attributes(oauth2AuthorizedClient(authorizedClient))
@@ -248,7 +248,7 @@ public class UserController {
 
 	@GetMapping("/viewAllUsers")
 	public List<UserResponse> fetchAllUsers(
-			@RegisteredOAuth2AuthorizedClient(API_CLIENT_AUTHORIZATION_CODE) OAuth2AuthorizedClient authorizedClient) {
+			@RegisteredOAuth2AuthorizedClient("okta") OAuth2AuthorizedClient authorizedClient) {
 		return this.webClient.get()
 			.uri(RESOURCE_SERVER_API_URL + "/users")
 			.attributes(oauth2AuthorizedClient(authorizedClient))

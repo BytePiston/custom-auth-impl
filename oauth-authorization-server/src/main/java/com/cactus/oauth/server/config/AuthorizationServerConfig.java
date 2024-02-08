@@ -60,14 +60,15 @@ public class AuthorizationServerConfig {
 	@Bean
 	public RegisteredClientRepository registeredClientRepository() {
 		RegisteredClient registeredClient = RegisteredClient.withId(UUID.randomUUID().toString())
-			.clientId("api-client")
-			.clientSecret(passwordEncoder.encode("secret"))
+			.clientId("0oaf0ow40uUMcVVgv5d7")
+			.clientSecret("U9Ev8IH2-T3ukJ698-WqarqLq6S-8toAmG0RkLbVbXTVAoLReTPlogW9f2-J5-8L")
 			.clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
 			.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
 			.authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
 			.authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-			.redirectUri("http://127.0.0.1:8080/login/oauth2/code/api-client-oidc")
-			.redirectUri("http://127.0.0.1:8080/authorized")
+			.redirectUri("http://localhost:8080/login/oauth2/code/okta")
+			.redirectUri("https://dev-22461297.okta.com/oauth2/v1/authorize")
+			.postLogoutRedirectUri("http://localhost:8080")
 			.scope(OidcScopes.OPENID)
 			.scope("api.read")
 			.clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
@@ -105,7 +106,7 @@ public class AuthorizationServerConfig {
 
 	@Bean
 	public AuthorizationServerSettings providerSettings() {
-		return AuthorizationServerSettings.builder().issuer("http://localhost:9000").build();
+		return AuthorizationServerSettings.builder().issuer("https://dev-22461297.okta.com/oauth2/default").build();
 	}
 
 }

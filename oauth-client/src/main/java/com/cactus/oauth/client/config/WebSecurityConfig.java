@@ -33,7 +33,7 @@ public class WebSecurityConfig {
 			req.requestMatchers(HttpMethod.POST, WHITE_LIST_POST_URLS).permitAll();
 			req.anyRequest().authenticated();
 		})
-			.oauth2Login(oauth2login -> oauth2login.loginPage("/oauth2/authorization/api-client-oidc"))
+			.oauth2Login(oauth2login -> oauth2login.loginPage("/oauth2/authorization/okta"))
 			.oauth2Client(Customizer.withDefaults());
 		return httpSecurity.build();
 	}

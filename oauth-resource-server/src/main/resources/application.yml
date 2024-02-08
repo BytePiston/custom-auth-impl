@@ -15,4 +15,4 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:9000
+          issuer-uri: https://dev-22461297.okta.com/oauth2/default

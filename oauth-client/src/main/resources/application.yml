@@ -15,29 +15,30 @@ spring:
     oauth2:
       client:
         registration:
-          api-client-oidc:
-            provider: spring
-            client-id: api-client
-            client-secret: secret
+          okta:
+            provider: okta
+            client-id: 0oaf0ow40uUMcVVgv5d7
+            client-secret: U9Ev8IH2-T3ukJ698-WqarqLq6S-8toAmG0RkLbVbXTVAoLReTPlogW9f2-J5-8L
             authorization-grant-type: authorization_code
-            redirect-uri: "http://127.0.0.1:8080/login/oauth2/code/{registrationId}"
-            scope: openid
-            client-name: api-client-oidc
-          api-client-authorization-code:
-            provider: spring
-            client-id: api-client
-            client-secret: secret
-            authorization-grant-type: authorization_code
-            redirect-uri: "http://127.0.0.1:8080/authorized"
-            scope: api.read
-            client-name: api-client-authorization-code
+            redirect-uri: "http://localhost:8080/login/oauth2/code/{registrationId}"
+            scope: openid+profile+api.read
+#            client-name: api-client-oidc
+
+#          api-client-authorization-code:
+#            provider: okta
+#            client-id: 0oaf0ow40uUMcVVgv5d7
+#            client-secret: U9Ev8IH2-T3ukJ698-WqarqLq6S-8toAmG0RkLbVbXTVAoLReTPlogW9f2-J5-8L
+#            authorization-grant-type: authorization_code
+#            redirect-uri: "https://dev-22461297.okta.com/oauth2/v1/authorize?idp=0oaf0q3xu9CKGaryq5d7&client_id={clientId}&response_type={responseType}&response_mode={responseMode}&scope={scopes}&redirect_uri={redirectUri}&state={state}&nonce={nonce}"
+#            scope: api.read
+#            client-name: api-client-authorization-code
         provider:
-          spring:
-            issuer-uri: http://localhost:9000
+          okta:
+            issuer-uri: https://dev-22461297.okta.com/oauth2/default
 
 logging:
   level:
     org.springframework.web.client.RestTemplate: DEBUG
 
 resource-server:
-  api-url-value: http://127.0.0.1:8090/api/v1
+  api-url-value: http://localhost:8090/api/v1
