@@ -27,8 +27,8 @@ public class ResetPasswordEventListener implements ApplicationListener<ResetPass
 		User user = event.getUser();
 		String token = UUID.randomUUID().toString();
 		userService.persistResetPasswordToken(token, user);
-		String resetPasswordUrl = event.getApplicationUrl() + Constants.FORWARD_SLASH + Constants.USER + Constants.FORWARD_SLASH
-				+ Constants.UPDATE_PASSWORD_ENDPOINT + token;
+		String resetPasswordUrl = event.getApplicationUrl() + Constants.FORWARD_SLASH + Constants.USER
+				+ Constants.FORWARD_SLASH + Constants.UPDATE_PASSWORD_ENDPOINT + token;
 		log.info("Follow the link to reset your password!! : " + resetPasswordUrl);
 		event.getResetPasswordUrlFuture().complete(resetPasswordUrl);
 	}

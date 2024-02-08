@@ -66,8 +66,8 @@ public class AuthorizationServerConfig {
 			.authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
 			.authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
 			.authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-			.redirectUri("http://127.0.0.1:8080/login/oauth2/code/api-client-oidc")
-			.redirectUri("http://127.0.0.1:8080/authorized")
+			.redirectUri("http://oauth-client:8080/login/oauth2/code/api-client-oidc")
+			.redirectUri("http://oauth-client:8080/authorized")
 			.scope(OidcScopes.OPENID)
 			.scope("api.read")
 			.clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
@@ -105,7 +105,7 @@ public class AuthorizationServerConfig {
 
 	@Bean
 	public AuthorizationServerSettings providerSettings() {
-		return AuthorizationServerSettings.builder().issuer("http://localhost:9000").build();
+		return AuthorizationServerSettings.builder().issuer("http://oauth-authorization-server:9000").build();
 	}
 
 }

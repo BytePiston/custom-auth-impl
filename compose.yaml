@@ -25,6 +25,7 @@ services:
     build: ./oauth-authorization-server
 #    working_dir: /oauth-authorization-server
     container_name: oauth-authorization-server
+    hostname: oauth-authorization-server
     restart: always
     depends_on:
       spring-security-mysql:
@@ -62,7 +63,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=test
 #      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_SPRING_ISSUER-URI=http://oauth-authorization-server:9000
-      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_SPRING_ISSUER-URI=http://localhost:9000
+#      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_SPRING_ISSUER-URI=http://oauth-authorization-server:9000
     ports:
       - "8080:8080"
     networks:
@@ -92,4 +93,5 @@ services:
 networks:
   spring-security-network:
     driver: bridge
+
 

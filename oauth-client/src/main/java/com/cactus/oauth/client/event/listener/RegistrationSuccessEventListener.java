@@ -27,8 +27,8 @@ public class RegistrationSuccessEventListener implements ApplicationListener<Reg
 		User user = event.getUser();
 		String token = UUID.randomUUID().toString();
 		userService.persistVerificationToken(token, user);
-		String verificationUrl = event.getApplicationUrl() + Constants.FORWARD_SLASH + Constants.USER + Constants.FORWARD_SLASH
-				+ Constants.VERIFY_TOKEN_ENDPOINT + token;
+		String verificationUrl = event.getApplicationUrl() + Constants.FORWARD_SLASH + Constants.USER
+				+ Constants.FORWARD_SLASH + Constants.VERIFY_TOKEN_ENDPOINT + token;
 		log.info("Follow the link to verify your account!! : " + verificationUrl);
 		event.getVerificationUrlFuture().complete(verificationUrl);
 	}
