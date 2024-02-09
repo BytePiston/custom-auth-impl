@@ -15,10 +15,14 @@ import com.cactus.oauth.client.response.UserRegistrationResponse;
 import com.cactus.oauth.client.response.UserResponse;
 import com.cactus.oauth.client.service.IUserService;
 import com.cactus.oauth.client.utils.Utils;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.okta.sdk.authc.credentials.TokenClientCredentials;
 import com.okta.sdk.client.Clients;
 import com.okta.sdk.resource.api.UserApi;
 import com.okta.sdk.resource.client.ApiClient;
+import com.okta.sdk.resource.client.ApiException;
 import com.okta.sdk.resource.user.UserBuilder;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -80,7 +84,7 @@ public class UserController {
 				.setPassword(userModel.getPassword().toCharArray())
 				.buildAndCreate(userApi);
 		}
-		catch (Exception e) {
+		catch (ApiException e) {
 			UserRegistrationResponse response = UserRegistrationResponse.builder()
 				.status(ERROR)
 				.message(e.getMessage())
@@ -153,6 +157,7 @@ public class UserController {
 				.build();
 			return ResponseEntity.status(HttpStatus.CREATED).body(response);
 		}
+
 		RegistrationTokenResponse response = RegistrationTokenResponse.builder()
 			.status(INVALID)
 			.message("Invalid Token, please verify URL!!")
@@ -174,6 +179,11 @@ public class UserController {
 				.message("New Url Successfully Generated!!")
 				.tokenUrl(resetUrlFuture.join())
 				.build();
+
+			/*
+			 * TODO: Block User until new password is updated in Okta;
+			 */
+
 			return ResponseEntity.status(HttpStatus.CREATED).body(response);
 		}
 
@@ -190,6 +200,11 @@ public class UserController {
 			HttpServletRequest request) throws ResourceNotFoundException {
 		String responseString = userService.validateResetPasswordToken(token);
 		if (responseString.equals(SUCCESS)) {
+
+			/*
+			 * TODO: Unblock User and Update password in Okta;
+			 */
+
 			userService.updatePassword(resetPasswordModel.getEmail(), resetPasswordModel.getNewPassword());
 			ResetPasswordResponse response = ResetPasswordResponse.builder()
 				.status(SUCCESS)
