@@ -1,11 +1,11 @@
 package com.cactus.oauth.client.controller;
 
-import com.cactus.oauth.client.exception.ResourceNotFoundException;
 import com.cactus.oauth.client.entity.RegistrationToken;
 import com.cactus.oauth.client.entity.ResetPasswordToken;
 import com.cactus.oauth.client.entity.User;
 import com.cactus.oauth.client.event.RegistrationSuccessEvent;
 import com.cactus.oauth.client.event.ResetPasswordEvent;
+import com.cactus.oauth.client.exception.ResourceNotFoundException;
 import com.cactus.oauth.client.model.ChangePasswordModel;
 import com.cactus.oauth.client.model.ResetPasswordModel;
 import com.cactus.oauth.client.model.UserModel;
@@ -15,6 +15,11 @@ import com.cactus.oauth.client.response.UserRegistrationResponse;
 import com.cactus.oauth.client.response.UserResponse;
 import com.cactus.oauth.client.service.IUserService;
 import com.cactus.oauth.client.utils.Utils;
+import com.okta.sdk.authc.credentials.TokenClientCredentials;
+import com.okta.sdk.client.Clients;
+import com.okta.sdk.resource.api.UserApi;
+import com.okta.sdk.resource.client.ApiClient;
+import com.okta.sdk.resource.user.UserBuilder;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -46,20 +51,42 @@ public class UserController {
 
 	private final WebClient webClient;
 
+	private final ApiClient apiClient;
+
 	// Fetching Resource-server URL from application.yml;
 	@Value("${resource-server.api-url-value}")
 	public String RESOURCE_SERVER_API_URL;
 
 	@Autowired
-	public UserController(IUserService userService, ApplicationEventPublisher eventPublisher, WebClient webClient) {
+	public UserController(IUserService userService, ApplicationEventPublisher eventPublisher, WebClient webClient,
+			ApiClient apiClient) {
 		this.userService = userService;
 		this.eventPublisher = eventPublisher;
 		this.webClient = webClient;
+		this.apiClient = apiClient;
 	}
 
 	@PostMapping("/register")
 	public ResponseEntity<UserRegistrationResponse> registerUser(@Valid @RequestBody UserModel userModel,
 			final HttpServletRequest request) {
+
+		UserApi userApi = new UserApi(apiClient);
+		try {
+			UserBuilder.instance()
+				.setActive(false)
+				.setFirstName(userModel.getFirstName())
+				.setLastName(userModel.getLastName())
+				.setEmail(userModel.getEmail())
+				.setPassword(userModel.getPassword().toCharArray())
+				.buildAndCreate(userApi);
+		}
+		catch (Exception e) {
+			UserRegistrationResponse response = UserRegistrationResponse.builder()
+				.status(ERROR)
+				.message(e.getMessage())
+				.build();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+		}
 
 		User user = userService.registerUser(userModel);
 		RegistrationSuccessEvent event = new RegistrationSuccessEvent(user, Utils.getApplicationUrl(request));
@@ -71,6 +98,7 @@ public class UserController {
 			.email(userModel.getEmail())
 			.role(userModel.getRole())
 			.verificationUrl(verificationUrl.join())
+			.status(SUCCESS)
 			.build();
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}

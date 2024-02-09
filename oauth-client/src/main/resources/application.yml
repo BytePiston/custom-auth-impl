@@ -16,7 +16,7 @@ spring:
       client:
         registration:
           okta:
-            provider: okta
+            provider: spring
             client-id: 0oaf0ow40uUMcVVgv5d7
             client-secret: U9Ev8IH2-T3ukJ698-WqarqLq6S-8toAmG0RkLbVbXTVAoLReTPlogW9f2-J5-8L
             authorization-grant-type: authorization_code
@@ -25,15 +25,15 @@ spring:
 #            client-name: api-client-oidc
 
 #          api-client-authorization-code:
-#            provider: okta
+#            provider: spring
 #            client-id: 0oaf0ow40uUMcVVgv5d7
 #            client-secret: U9Ev8IH2-T3ukJ698-WqarqLq6S-8toAmG0RkLbVbXTVAoLReTPlogW9f2-J5-8L
 #            authorization-grant-type: authorization_code
-#            redirect-uri: "https://dev-22461297.okta.com/oauth2/v1/authorize?idp=0oaf0q3xu9CKGaryq5d7&client_id={clientId}&response_type={responseType}&response_mode={responseMode}&scope={scopes}&redirect_uri={redirectUri}&state={state}&nonce={nonce}"
-#            scope: api.read
+#            redirect-uri: "http://localhost:8080/login/oauth2/code/{registrationId}"
+#            scope: api.read, read, write
 #            client-name: api-client-authorization-code
         provider:
-          okta:
+          spring:
             issuer-uri: https://dev-22461297.okta.com/oauth2/default
 
 logging:
@@ -42,3 +42,8 @@ logging:
 
 resource-server:
   api-url-value: http://localhost:8090/api/v1
+
+okta:
+  domain-url: https://dev-22461297.okta.com
+  api-token: 00rieZ5ksXHOVvb3-D1PmON40qYuYhwRgVt7vFyEMb
+

@@ -23,4 +23,8 @@ public class UserRegistrationResponse {
 
 	private String verificationUrl;
 
+	private String status;
+
+	private String message;
+
 }

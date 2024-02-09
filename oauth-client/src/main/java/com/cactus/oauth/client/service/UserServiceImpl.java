@@ -9,6 +9,9 @@ import com.cactus.oauth.client.entity.ResetPasswordToken;
 import com.cactus.oauth.client.entity.User;
 import com.cactus.oauth.client.model.ChangePasswordModel;
 import com.cactus.oauth.client.model.UserModel;
+import com.okta.sdk.resource.api.UserApi;
+import com.okta.sdk.resource.client.ApiClient;
+import com.okta.sdk.resource.user.UserBuilder;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,14 +37,17 @@ public class UserServiceImpl implements IUserService {
 
 	private final ResetPasswordTokenRepository resetPasswordTokenRepository;
 
+	private final ApiClient apiClient;
+
 	@Autowired
 	public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder,
 			VerificationTokenRepository verificationTokenRepository,
-			ResetPasswordTokenRepository resetPasswordTokenRepository) {
+			ResetPasswordTokenRepository resetPasswordTokenRepository, ApiClient apiClient) {
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.verificationTokenRepository = verificationTokenRepository;
 		this.resetPasswordTokenRepository = resetPasswordTokenRepository;
+		this.apiClient = apiClient;
 	}
 
 	@Override
@@ -72,6 +78,10 @@ public class UserServiceImpl implements IUserService {
 			RegistrationToken registrationTokenObj = verificationToken.get();
 			if (registrationTokenObj.getExpirationTime().compareTo(Calendar.getInstance().getTime()) >= 0) {
 				User user = registrationTokenObj.getUser();
+
+				UserApi userApi = new UserApi(apiClient);
+				userApi.activateUser(user.getEmail(), false);
+
 				user.setEnabled(true);
 				userRepository.save(user);
 				verificationTokenRepository.delete(registrationTokenObj);
