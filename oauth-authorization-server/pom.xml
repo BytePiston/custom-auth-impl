@@ -9,7 +9,6 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>oauth-authorization-server</artifactId>
-
     <name>oauth-authorization-server</name>
     <description>OAuth Authorization Server</description>
     <properties>
