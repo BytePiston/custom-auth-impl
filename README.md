@@ -55,9 +55,9 @@ To get started with the project, follow these steps:
 
 #### Each module in the project has its own configuration options please follow below links for "application.yml" file for each module.
 
-- [OAuth-Authorization-Server Configuration](https://github.com/BytePiston/spring-security-parent/blob/master/oauth-authorization-server/src/main/resources/application.yml)
-- [OAuth-Resource-Server Configuration](https://github.com/BytePiston/spring-security-parent/blob/master/oauth-resource-server/src/main/resources/application.yml)
-- [Spring-Security-Client Configuration](https://github.com/BytePiston/spring-security-parent/blob/master/spring-security-client/src/main/resources/application.yml)
+- [OAuth-Authorization-Server Configuration](https://github.com/BytePiston/custom-auth-impl/blob/master/oauth-authorization-server/src/main/resources/application.yml)
+- [OAuth-Resource-Server Configuration](https://github.com/BytePiston/custom-auth-impl/blob/master/oauth-resource-server/src/main/resources/application.yml)
+- [Spring-Security-Client Configuration](https://github.com/BytePiston/custom-auth-impl/blob/master/spring-security-client/src/main/resources/application.yml)
 
 
 ## Usage
