@@ -33,6 +33,9 @@
         <spring-boot-security.version>6.2.1</spring-boot-security.version>
         <lombok.version>1.18.30</lombok.version>
         <mysql-driver.version>8.2.0</mysql-driver.version>
+        <spring.javaformat.version>0.0.40</spring.javaformat.version>
+        <javax.xml.version>2.3.1</javax.xml.version>
+        <okta.sdk.api.version>15.0.0</okta.sdk.api.version>
     </properties>
     <dependencyManagement>
         <dependencies>

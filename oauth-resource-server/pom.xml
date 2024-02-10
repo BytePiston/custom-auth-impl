@@ -71,7 +71,7 @@
             <plugin>
                 <groupId>io.spring.javaformat</groupId>
                 <artifactId>spring-javaformat-maven-plugin</artifactId>
-                <version>0.0.40</version>
+                <version>${spring.javaformat.version}</version>
                 <executions>
                     <execution>
                         <inherited>true</inherited>
