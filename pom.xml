@@ -17,8 +17,8 @@
     </parent>
 
     <groupId>com.cactus</groupId>
-    <artifactId>spring-security-parent</artifactId>
-    <name>spring-security-parent</name>
+    <artifactId>custom-auth-impl</artifactId>
+    <name>custom-auth-impl</name>
     <version>1.0.0</version>
     <packaging>pom</packaging>
 
