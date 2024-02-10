@@ -1,11 +1,11 @@
-# Spring Security Parent Project
+# Custom Implementation of Authentication and Authorization Server Using OAuth 2.0 and OpenID Connect.
 
 #### This repository houses a multi-module Spring Security application comprising three main modules: 
 - OAuth-Client
 - OAuth-Auth-Server
 - OAuth-Resource-Server 
 
-#### The project is developed using Java, Spring Boot, and SQL and implements Authentication and Authorization servers based on OAuth 2.0 and OpenID Connect standards within a distributed system.
+#### The project implements Custom Authentication and Authorization servers based on OAuth 2.0 and OpenID Connect standards within a distributed system. Developed using Java, Spring Boot, and SQL.
 
 ## Table of Contents
 
