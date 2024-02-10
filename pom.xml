@@ -7,7 +7,7 @@
         <module>oauth-client</module>
         <module>oauth-resource-server</module>
 
-<!-- NOT REQUIRED: Since using Okta Auth Server -->
+<!-- NOT REQUIRED: Using Okta Auth Server -->
 <!-- <module>oauth-authorization-server</module> -->
 
     </modules>
@@ -39,7 +39,7 @@
     </properties>
     <dependencyManagement>
         <dependencies>
-            <!--            local dependencies-->
+            <!-- local dependencies -->
         </dependencies>
     </dependencyManagement>
 
